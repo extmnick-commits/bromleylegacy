@@ -2,8 +2,11 @@
 
 import { useEffect, useState } from "react";
 import { doc, getDoc, setDoc } from "firebase/firestore";
-import { db } from "../../firebase"; 
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import { db, auth } from "../../firebase"; 
+import { useRouter } from "next/navigation";
 import MediaUploader from "../../MediaUploader";
+import WebsitePreview from "../../WebsitePreview";
 
 export default function AdminPage() {
   const [content, setContent] = useState({
@@ -27,24 +30,36 @@ export default function AdminPage() {
   
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("loading");
   const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "success" | "error">("idle");
+  const [previewMode, setPreviewMode] = useState<"desktop" | "mobile">("desktop");
+  const [isAuthLoading, setIsAuthLoading] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
-    const fetchContent = async () => {
-      try {
-        const docRef = doc(db, "site_content", "main");
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          setContent((prev) => ({ ...prev, ...docSnap.data() }));
-        }
-        setStatus("success");
-      } catch (error) {
-        console.error("Error fetching content:", error);
-        setStatus("error");
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setIsAuthLoading(false);
+        fetchContent();
+      } else {
+        router.push("/admin");
       }
-    };
+    });
     
-    fetchContent();
-  }, []);
+    return () => unsubscribe();
+  }, [router]);
+
+  const fetchContent = async () => {
+    try {
+      const docRef = doc(db, "site_content", "main");
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        setContent((prev) => ({ ...prev, ...docSnap.data() }));
+      }
+      setStatus("success");
+    } catch (error) {
+      console.error("Error fetching content:", error);
+      setStatus("error");
+    }
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -64,14 +79,27 @@ export default function AdminPage() {
     }
   };
 
-  if (status === "loading") {
+  const handleSignOut = async () => {
+    try {
+      await signOut(auth);
+      router.push("/admin");
+    } catch (error) {
+      console.error("Error signing out:", error);
+    }
+  };
+
+  if (isAuthLoading || status === "loading") {
     return <div className="min-h-screen bg-[#080808] flex items-center justify-center text-[#C5A059]">Loading admin dashboard...</div>;
   }
-
+ 
   return (
-    <div className="min-h-screen bg-[#111] py-12 px-6 text-white font-sans">
-      <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-heading font-bold mb-8 text-[#C5A059]">Bromley Legacy Builders CMS</h1>
+    <div className="flex flex-col lg:flex-row h-screen bg-[#111] text-white font-sans overflow-hidden">
+      {/* Left Side: Form */}
+      <div className="w-full lg:w-1/2 h-full overflow-y-auto py-8 px-4 lg:px-10 border-r border-[#333]">
+        <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
+          <h1 className="text-2xl md:text-3xl font-heading font-bold text-[#C5A059]">Bromley Legacy Builders CMS</h1>
+          <button onClick={handleSignOut} className="px-4 py-2 bg-[#222] text-sm text-gray-300 hover:text-white rounded border border-[#444] hover:border-[#C5A059] transition-colors">Sign Out</button>
+        </div>
 
         {saveStatus === "success" && (
           <div className="bg-green-900/30 text-green-400 px-6 py-4 rounded-lg mb-6 border border-green-800 font-medium shadow-sm">
@@ -84,7 +112,7 @@ export default function AdminPage() {
           </div>
         )}
 
-        <form onSubmit={handleSave} className="space-y-10 bg-[#1A1A1A] p-8 md:p-10 rounded-xl shadow-lg border border-[#333]">
+        <form onSubmit={handleSave} className="space-y-10 bg-[#1A1A1A] p-5 md:p-10 rounded-xl shadow-lg border border-[#333]">
           
           {/* Hero Section */}
           <div>
@@ -153,22 +181,28 @@ export default function AdminPage() {
               <div className="p-4 border border-[#333] rounded-lg bg-[#222]">
                 <h3 className="text-[#E4C882] font-semibold mb-3">Service 1</h3>
                 <div className="space-y-3">
-                  <input type="text" placeholder="Title" name="service1Title" value={content.service1Title} onChange={handleChange} className="w-full px-4 py-2 bg-[#111] border border-[#333] rounded-md focus:ring-[#C5A059] outline-none text-white" />
-                  <textarea placeholder="Description" name="service1Desc" value={content.service1Desc} onChange={handleChange} rows={2} className="w-full px-4 py-2 bg-[#111] border border-[#333] rounded-md focus:ring-[#C5A059] outline-none text-white" />
+                  <label className="block text-sm font-medium text-gray-300 mb-1">Title</label>
+                  <input type="text" name="service1Title" value={content.service1Title} onChange={handleChange} className="w-full px-4 py-2 bg-[#111] border border-[#333] rounded-md focus:ring-[#C5A059] outline-none text-white" />
+                  <label className="block text-sm font-medium text-gray-300 mb-1">Description</label>
+                  <textarea name="service1Desc" value={content.service1Desc} onChange={handleChange} rows={2} className="w-full px-4 py-2 bg-[#111] border border-[#333] rounded-md focus:ring-[#C5A059] outline-none text-white" />
                 </div>
               </div>
               <div className="p-4 border border-[#333] rounded-lg bg-[#222]">
                 <h3 className="text-[#E4C882] font-semibold mb-3">Service 2</h3>
                 <div className="space-y-3">
-                  <input type="text" placeholder="Title" name="service2Title" value={content.service2Title} onChange={handleChange} className="w-full px-4 py-2 bg-[#111] border border-[#333] rounded-md focus:ring-[#C5A059] outline-none text-white" />
-                  <textarea placeholder="Description" name="service2Desc" value={content.service2Desc} onChange={handleChange} rows={2} className="w-full px-4 py-2 bg-[#111] border border-[#333] rounded-md focus:ring-[#C5A059] outline-none text-white" />
+                  <label className="block text-sm font-medium text-gray-300 mb-1">Title</label>
+                  <input type="text" name="service2Title" value={content.service2Title} onChange={handleChange} className="w-full px-4 py-2 bg-[#111] border border-[#333] rounded-md focus:ring-[#C5A059] outline-none text-white" />
+                  <label className="block text-sm font-medium text-gray-300 mb-1">Description</label>
+                  <textarea name="service2Desc" value={content.service2Desc} onChange={handleChange} rows={2} className="w-full px-4 py-2 bg-[#111] border border-[#333] rounded-md focus:ring-[#C5A059] outline-none text-white" />
                 </div>
               </div>
               <div className="p-4 border border-[#333] rounded-lg bg-[#222]">
                 <h3 className="text-[#E4C882] font-semibold mb-3">Service 3</h3>
                 <div className="space-y-3">
-                  <input type="text" placeholder="Title" name="service3Title" value={content.service3Title} onChange={handleChange} className="w-full px-4 py-2 bg-[#111] border border-[#333] rounded-md focus:ring-[#C5A059] outline-none text-white" />
-                  <textarea placeholder="Description" name="service3Desc" value={content.service3Desc} onChange={handleChange} rows={2} className="w-full px-4 py-2 bg-[#111] border border-[#333] rounded-md focus:ring-[#C5A059] outline-none text-white" />
+                  <label className="block text-sm font-medium text-gray-300 mb-1">Title</label>
+                  <input type="text" name="service3Title" value={content.service3Title} onChange={handleChange} className="w-full px-4 py-2 bg-[#111] border border-[#333] rounded-md focus:ring-[#C5A059] outline-none text-white" />
+                  <label className="block text-sm font-medium text-gray-300 mb-1">Description</label>
+                  <textarea name="service3Desc" value={content.service3Desc} onChange={handleChange} rows={2} className="w-full px-4 py-2 bg-[#111] border border-[#333] rounded-md focus:ring-[#C5A059] outline-none text-white" />
                 </div>
               </div>
             </div>
@@ -197,12 +231,39 @@ export default function AdminPage() {
             <button
               type="submit"
               disabled={saveStatus === "saving"}
-              className="bg-[#C5A059] text-black px-8 py-3 rounded-md font-bold uppercase tracking-widest hover:bg-[#E4C882] transition-colors shadow-md disabled:opacity-70 disabled:cursor-not-allowed"
+              className="w-full md:w-auto bg-[#C5A059] text-black px-8 py-3 rounded-md font-bold uppercase tracking-widest hover:bg-[#E4C882] transition-colors shadow-md disabled:opacity-70 disabled:cursor-not-allowed"
             >
               {saveStatus === "saving" ? "Saving Changes..." : "Publish Changes"}
             </button>
           </div>
         </form>
+      </div>
+
+      {/* Right Side: Preview */}
+      <div className="w-full lg:w-1/2 h-full flex flex-col bg-[#080808]">
+        <div className="flex justify-center items-center py-4 bg-[#1A1A1A] border-b border-[#333] gap-4">
+          <button
+            type="button"
+            onClick={() => setPreviewMode("desktop")}
+            className={`px-4 py-2 rounded-md font-bold uppercase tracking-widest text-sm transition-colors ${previewMode === "desktop" ? "bg-[#C5A059] text-black" : "bg-[#222] text-gray-400 hover:text-white"}`}
+          >
+            Desktop
+          </button>
+          <button
+            type="button"
+            onClick={() => setPreviewMode("mobile")}
+            className={`px-4 py-2 rounded-md font-bold uppercase tracking-widest text-sm transition-colors ${previewMode === "mobile" ? "bg-[#C5A059] text-black" : "bg-[#222] text-gray-400 hover:text-white"}`}
+          >
+            Mobile
+          </button>
+        </div>
+        <div className="flex-1 overflow-y-auto flex justify-center items-start p-4 lg:p-8">
+          <div className={`transition-all duration-300 bg-black overflow-hidden ${previewMode === "mobile" ? "w-full max-w-[375px] h-[812px] border-[12px] border-[#333] rounded-[2.5rem] shadow-2xl relative flex-shrink-0" : "w-full h-full border border-[#333] rounded-lg shadow-lg relative"}`}>
+            <div className="w-full h-full overflow-y-auto overflow-x-hidden">
+              <WebsitePreview content={content} />
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

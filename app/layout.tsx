@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Montserrat, Playfair_Display, Open_Sans } from "next/font/google";
 import "./globals.css";
 
@@ -24,6 +24,12 @@ const openSans = Open_Sans({
 export const metadata: Metadata = {
   title: "Bromley Legacy Builders",
   description: "The standard is excellence. Premium builders and contractors.",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
 };
 
 export default function RootLayout({
