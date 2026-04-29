@@ -7,17 +7,22 @@ import MediaUploader from "../../MediaUploader";
 
 export default function AdminPage() {
   const [content, setContent] = useState({
-    tagline: "",
-    service1Desc: "",
-    service2Desc: "",
-    service3Desc: "",
-    address1: "",
-    address2: "",
-    facebook: "",
-    instagram: "",
-    linkedin: "",
     logoUrl: "",
+    heroTitle: "THE STANDARD IS",
+    heroSubtitle: "BROMLEY LEGACY BUILDERS",
     heroMediaUrl: "",
+    aboutHeading: "Our Legacy",
+    aboutText: "We build with excellence.",
+    aboutImageUrl: "",
+    service1Title: "Custom Homes",
+    service1Desc: "Building your dream home from the ground up.",
+    service2Title: "Renovations",
+    service2Desc: "Transforming existing spaces into modern masterpieces.",
+    service3Title: "Commercial",
+    service3Desc: "High-quality commercial construction and build-outs.",
+    contactPhone: "(555) 123-4567",
+    contactEmail: "info@bromleylegacy.com",
+    contactAddress: "123 Builder Lane, San Diego, CA",
   });
   
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("loading");
@@ -60,60 +65,45 @@ export default function AdminPage() {
   };
 
   if (status === "loading") {
-    return <div className="min-h-screen flex items-center justify-center text-slate-600">Loading admin dashboard...</div>;
+    return <div className="min-h-screen bg-[#080808] flex items-center justify-center text-[#C5A059]">Loading admin dashboard...</div>;
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 py-12 px-6">
+    <div className="min-h-screen bg-[#111] py-12 px-6 text-white font-sans">
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold mb-8 text-slate-900">Content Management Dashboard</h1>
+        <h1 className="text-3xl font-heading font-bold mb-8 text-[#C5A059]">Bromley Legacy Builders CMS</h1>
 
         {saveStatus === "success" && (
-          <div className="bg-green-50 text-green-800 px-6 py-4 rounded-lg mb-6 border border-green-200 font-medium shadow-sm">
+          <div className="bg-green-900/30 text-green-400 px-6 py-4 rounded-lg mb-6 border border-green-800 font-medium shadow-sm">
             Website content updated successfully!
           </div>
         )}
         {saveStatus === "error" && (
-          <div className="bg-red-50 text-red-800 px-6 py-4 rounded-lg mb-6 border border-red-200 font-medium shadow-sm">
+          <div className="bg-red-900/30 text-red-400 px-6 py-4 rounded-lg mb-6 border border-red-800 font-medium shadow-sm">
             Error saving content. Please check the console for details.
           </div>
         )}
 
-        <form onSubmit={handleSave} className="space-y-10 bg-white p-8 md:p-10 rounded-xl shadow-sm border border-slate-200">
+        <form onSubmit={handleSave} className="space-y-10 bg-[#1A1A1A] p-8 md:p-10 rounded-xl shadow-lg border border-[#333]">
           
-          {/* General Info */}
+          {/* Hero Section */}
           <div>
-            <h2 className="text-xl font-semibold mb-4 text-slate-800 border-b border-slate-100 pb-2">General Information</h2>
+            <h2 className="text-xl font-heading font-bold mb-4 text-[#C5A059] border-b border-[#333] pb-2 uppercase tracking-widest">Hero Section</h2>
             <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">Tagline</label>
-                <textarea
-                  name="tagline"
-                  value={content.tagline}
-                  onChange={handleChange}
-                  rows={3}
-                  className="w-full px-4 py-2 border border-slate-300 rounded-md focus:ring-blue-900 focus:border-blue-900 outline-none transition-colors"
-                />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">Hero Title</label>
+                  <input type="text" name="heroTitle" value={content.heroTitle} onChange={handleChange} className="w-full px-4 py-2 bg-[#222] border border-[#444] rounded-md focus:ring-[#C5A059] focus:border-[#C5A059] outline-none text-white" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">Hero Subtitle</label>
+                  <input type="text" name="heroSubtitle" value={content.heroSubtitle} onChange={handleChange} className="w-full px-4 py-2 bg-[#222] border border-[#444] rounded-md focus:ring-[#C5A059] focus:border-[#C5A059] outline-none text-white" />
+                </div>
               </div>
-            </div>
-          </div>
-
-          {/* Media */}
-          <div>
-            <h2 className="text-xl font-semibold mb-4 text-slate-800 border-b border-slate-100 pb-2">Media & Branding</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="bg-slate-50 p-4 rounded-lg border border-slate-100">
-                <label className="block text-sm font-medium text-slate-700 mb-3">Company Logo</label>
-                {content.logoUrl && <img src={content.logoUrl} alt="Logo" className="h-20 mb-4 rounded shadow-sm bg-white" />}
-                <MediaUploader
-                  folder="branding"
-                  onUploadSuccess={(url) => setContent((prev) => ({ ...prev, logoUrl: url }))}
-                />
-              </div>
-              <div className="bg-slate-50 p-4 rounded-lg border border-slate-100">
-                <label className="block text-sm font-medium text-slate-700 mb-3">Hero Media (Image or Video)</label>
+              <div className="bg-[#222] p-4 rounded-lg border border-[#444]">
+                <label className="block text-sm font-medium text-gray-300 mb-3">Hero Background Media (Image or Video)</label>
                 {content.heroMediaUrl && (
-                  <div className="mb-4 text-xs text-blue-600 break-all p-2 bg-blue-50 rounded border border-blue-100">
+                  <div className="mb-4 text-xs text-[#C5A059] break-all p-2 bg-[#111] rounded border border-[#333]">
                     {content.heroMediaUrl}
                   </div>
                 )}
@@ -122,37 +112,84 @@ export default function AdminPage() {
                   onUploadSuccess={(url) => setContent((prev) => ({ ...prev, heroMediaUrl: url }))}
                 />
               </div>
-            </div>
-          </div>
-
-          {/* Services */}
-          <div>
-            <h2 className="text-xl font-semibold mb-4 text-slate-800 border-b border-slate-100 pb-2">Services Descriptions</h2>
-            <div className="space-y-5">
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">Real Estate</label>
-                <textarea name="service1Desc" value={content.service1Desc} onChange={handleChange} rows={2} className="w-full px-4 py-2 border border-slate-300 rounded-md focus:ring-blue-900 focus:border-blue-900 outline-none" />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">Notary & Live Scan</label>
-                <textarea name="service2Desc" value={content.service2Desc} onChange={handleChange} rows={2} className="w-full px-4 py-2 border border-slate-300 rounded-md focus:ring-blue-900 focus:border-blue-900 outline-none" />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">Tax Preparation</label>
-                <textarea name="service3Desc" value={content.service3Desc} onChange={handleChange} rows={2} className="w-full px-4 py-2 border border-slate-300 rounded-md focus:ring-blue-900 focus:border-blue-900 outline-none" />
+              <div className="bg-[#222] p-4 rounded-lg border border-[#444]">
+                <label className="block text-sm font-medium text-gray-300 mb-3">Company Logo</label>
+                {content.logoUrl && <img src={content.logoUrl} alt="Logo" className="h-20 mb-4 rounded shadow-sm bg-black" />}
+                <MediaUploader
+                  folder="branding"
+                  onUploadSuccess={(url) => setContent((prev) => ({ ...prev, logoUrl: url }))}
+                />
               </div>
             </div>
           </div>
 
-          {/* Contact & Socials */}
+          {/* About Section */}
           <div>
-            <h2 className="text-xl font-semibold mb-4 text-slate-800 border-b border-slate-100 pb-2">Contact & Socials</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="md:col-span-2"><label className="block text-sm font-medium text-slate-700 mb-1">Address 1 (Downtown)</label><textarea name="address1" value={content.address1} onChange={handleChange} rows={2} className="w-full px-4 py-2 border border-slate-300 rounded-md focus:ring-blue-900 focus:border-blue-900 outline-none" /></div>
-              <div className="md:col-span-2"><label className="block text-sm font-medium text-slate-700 mb-1">Address 2 (Westside)</label><textarea name="address2" value={content.address2} onChange={handleChange} rows={2} className="w-full px-4 py-2 border border-slate-300 rounded-md focus:ring-blue-900 focus:border-blue-900 outline-none" /></div>
-              <div><label className="block text-sm font-medium text-slate-700 mb-1">Facebook URL</label><input type="text" name="facebook" value={content.facebook} onChange={handleChange} className="w-full px-4 py-2 border border-slate-300 rounded-md focus:ring-blue-900 focus:border-blue-900 outline-none" /></div>
-              <div><label className="block text-sm font-medium text-slate-700 mb-1">Instagram URL</label><input type="text" name="instagram" value={content.instagram} onChange={handleChange} className="w-full px-4 py-2 border border-slate-300 rounded-md focus:ring-blue-900 focus:border-blue-900 outline-none" /></div>
-              <div className="md:col-span-2"><label className="block text-sm font-medium text-slate-700 mb-1">LinkedIn URL</label><input type="text" name="linkedin" value={content.linkedin} onChange={handleChange} className="w-full px-4 py-2 border border-slate-300 rounded-md focus:ring-blue-900 focus:border-blue-900 outline-none" /></div>
+            <h2 className="text-xl font-heading font-bold mb-4 text-[#C5A059] border-b border-[#333] pb-2 uppercase tracking-widest">About Section</h2>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-1">About Heading</label>
+                <input type="text" name="aboutHeading" value={content.aboutHeading} onChange={handleChange} className="w-full px-4 py-2 bg-[#222] border border-[#444] rounded-md focus:ring-[#C5A059] focus:border-[#C5A059] outline-none text-white" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-1">About Text</label>
+                <textarea name="aboutText" value={content.aboutText} onChange={handleChange} rows={4} className="w-full px-4 py-2 bg-[#222] border border-[#444] rounded-md focus:ring-[#C5A059] focus:border-[#C5A059] outline-none text-white" />
+              </div>
+              <div className="bg-[#222] p-4 rounded-lg border border-[#444]">
+                <label className="block text-sm font-medium text-gray-300 mb-3">About Image</label>
+                {content.aboutImageUrl && <img src={content.aboutImageUrl} alt="About" className="h-32 object-cover mb-4 rounded shadow-sm border border-[#333]" />}
+                <MediaUploader
+                  folder="branding"
+                  onUploadSuccess={(url) => setContent((prev) => ({ ...prev, aboutImageUrl: url }))}
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Services Section */}
+          <div>
+            <h2 className="text-xl font-heading font-bold mb-4 text-[#C5A059] border-b border-[#333] pb-2 uppercase tracking-widest">Services</h2>
+            <div className="space-y-6">
+              <div className="p-4 border border-[#333] rounded-lg bg-[#222]">
+                <h3 className="text-[#E4C882] font-semibold mb-3">Service 1</h3>
+                <div className="space-y-3">
+                  <input type="text" placeholder="Title" name="service1Title" value={content.service1Title} onChange={handleChange} className="w-full px-4 py-2 bg-[#111] border border-[#333] rounded-md focus:ring-[#C5A059] outline-none text-white" />
+                  <textarea placeholder="Description" name="service1Desc" value={content.service1Desc} onChange={handleChange} rows={2} className="w-full px-4 py-2 bg-[#111] border border-[#333] rounded-md focus:ring-[#C5A059] outline-none text-white" />
+                </div>
+              </div>
+              <div className="p-4 border border-[#333] rounded-lg bg-[#222]">
+                <h3 className="text-[#E4C882] font-semibold mb-3">Service 2</h3>
+                <div className="space-y-3">
+                  <input type="text" placeholder="Title" name="service2Title" value={content.service2Title} onChange={handleChange} className="w-full px-4 py-2 bg-[#111] border border-[#333] rounded-md focus:ring-[#C5A059] outline-none text-white" />
+                  <textarea placeholder="Description" name="service2Desc" value={content.service2Desc} onChange={handleChange} rows={2} className="w-full px-4 py-2 bg-[#111] border border-[#333] rounded-md focus:ring-[#C5A059] outline-none text-white" />
+                </div>
+              </div>
+              <div className="p-4 border border-[#333] rounded-lg bg-[#222]">
+                <h3 className="text-[#E4C882] font-semibold mb-3">Service 3</h3>
+                <div className="space-y-3">
+                  <input type="text" placeholder="Title" name="service3Title" value={content.service3Title} onChange={handleChange} className="w-full px-4 py-2 bg-[#111] border border-[#333] rounded-md focus:ring-[#C5A059] outline-none text-white" />
+                  <textarea placeholder="Description" name="service3Desc" value={content.service3Desc} onChange={handleChange} rows={2} className="w-full px-4 py-2 bg-[#111] border border-[#333] rounded-md focus:ring-[#C5A059] outline-none text-white" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Contact Info */}
+          <div>
+            <h2 className="text-xl font-heading font-bold mb-4 text-[#C5A059] border-b border-[#333] pb-2 uppercase tracking-widest">Contact Info</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-1">Phone</label>
+                <input type="text" name="contactPhone" value={content.contactPhone} onChange={handleChange} className="w-full px-4 py-2 bg-[#222] border border-[#444] rounded-md focus:ring-[#C5A059] outline-none text-white" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-1">Email</label>
+                <input type="text" name="contactEmail" value={content.contactEmail} onChange={handleChange} className="w-full px-4 py-2 bg-[#222] border border-[#444] rounded-md focus:ring-[#C5A059] outline-none text-white" />
+              </div>
+              <div className="md:col-span-2">
+                <label className="block text-sm font-medium text-gray-300 mb-1">Address</label>
+                <textarea name="contactAddress" value={content.contactAddress} onChange={handleChange} rows={2} className="w-full px-4 py-2 bg-[#222] border border-[#444] rounded-md focus:ring-[#C5A059] outline-none text-white" />
+              </div>
             </div>
           </div>
 
@@ -160,7 +197,7 @@ export default function AdminPage() {
             <button
               type="submit"
               disabled={saveStatus === "saving"}
-              className="bg-blue-900 text-white px-8 py-3 rounded-md font-semibold hover:bg-blue-800 transition-colors shadow-md disabled:opacity-70 disabled:cursor-not-allowed"
+              className="bg-[#C5A059] text-black px-8 py-3 rounded-md font-bold uppercase tracking-widest hover:bg-[#E4C882] transition-colors shadow-md disabled:opacity-70 disabled:cursor-not-allowed"
             >
               {saveStatus === "saving" ? "Saving Changes..." : "Publish Changes"}
             </button>

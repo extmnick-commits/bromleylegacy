@@ -1,27 +1,32 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import Image from "next/image";
+import { doc, getDoc } from "firebase/firestore";
 import { db } from "./firebase";
-import MediaUploader from "./MediaUploader";
+import { Building2, Hammer, HardHat, Phone, Mail, MapPin } from "lucide-react";
 
-export default function AdminPage() {
+export default function Home() {
   const [content, setContent] = useState({
-    tagline: "",
-    service1Desc: "",
-    service2Desc: "",
-    service3Desc: "",
-    address1: "",
-    address2: "",
-    facebook: "",
-    instagram: "",
-    linkedin: "",
     logoUrl: "",
+    heroTitle: "THE STANDARD IS",
+    heroSubtitle: "BROMLEY LEGACY BUILDERS",
     heroMediaUrl: "",
+    aboutHeading: "Our Legacy",
+    aboutText: "We build with excellence.",
+    aboutImageUrl: "",
+    service1Title: "Custom Homes",
+    service1Desc: "Building your dream home from the ground up.",
+    service2Title: "Renovations",
+    service2Desc: "Transforming existing spaces into modern masterpieces.",
+    service3Title: "Commercial",
+    service3Desc: "High-quality commercial construction and build-outs.",
+    contactPhone: "(555) 123-4567",
+    contactEmail: "info@bromleylegacy.com",
+    contactAddress: "123 Builder Lane, San Diego, CA",
   });
   
-  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("loading");
-  const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "success" | "error">("idle");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchContent = async () => {
@@ -31,142 +36,194 @@ export default function AdminPage() {
         if (docSnap.exists()) {
           setContent((prev) => ({ ...prev, ...docSnap.data() }));
         }
-        setStatus("success");
       } catch (error) {
         console.error("Error fetching content:", error);
-        setStatus("error");
+      } finally {
+        setLoading(false);
       }
     };
     
     fetchContent();
   }, []);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setContent((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSave = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setSaveStatus("saving");
-    try {
-      await setDoc(doc(db, "site_content", "main"), content, { merge: true });
-      setSaveStatus("success");
-      setTimeout(() => setSaveStatus("idle"), 3000);
-    } catch (error) {
-      console.error("Error saving content:", error);
-      setSaveStatus("error");
-    }
-  };
-
-  if (status === "loading") {
-    return <div className="min-h-screen flex items-center justify-center text-slate-600">Loading admin dashboard...</div>;
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#080808] flex items-center justify-center text-[#C5A059]">
+        <div className="animate-pulse flex flex-col items-center">
+          <HardHat className="w-12 h-12 mb-4" />
+          <p className="tracking-widest uppercase text-sm">Loading Excellence...</p>
+        </div>
+      </div>
+    );
   }
 
+  // Helper to determine if hero media is a video based on common extensions in Firebase URL
+  const isVideoUrl = (url: string) => {
+    if (!url) return false;
+    const lowerUrl = url.toLowerCase();
+    return lowerUrl.includes(".mp4") || lowerUrl.includes(".webm") || lowerUrl.includes(".mov");
+  };
+
+  const isVideo = isVideoUrl(content.heroMediaUrl);
+
   return (
-    <div className="min-h-screen bg-slate-50 py-12 px-6">
-      <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold mb-8 text-slate-900">Content Management Dashboard</h1>
+    <main className="flex flex-col items-center bg-[#080808] text-white min-h-screen w-full">
+      {/* 1. Hero Section */}
+      <section className="relative w-full h-screen flex flex-col items-center justify-center overflow-hidden">
+        {/* Background Media */}
+        <div className="absolute inset-0 z-0">
+          {content.heroMediaUrl ? (
+            isVideo ? (
+              <video 
+                autoPlay 
+                loop 
+                muted 
+                playsInline
+                className="w-full h-full object-cover opacity-40"
+              >
+                <source src={content.heroMediaUrl} />
+              </video>
+            ) : (
+              <img 
+                src={content.heroMediaUrl} 
+                alt="Background" 
+                className="w-full h-full object-cover opacity-40"
+              />
+            )
+          ) : (
+             <div className="w-full h-full bg-gradient-to-br from-[#111] to-[#000]"></div>
+          )}
+          {/* Vignette Overlay */}
+          <div className="absolute inset-0 bg-black bg-opacity-50"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-[#080808] via-transparent to-transparent"></div>
+        </div>
 
-        {saveStatus === "success" && (
-          <div className="bg-green-50 text-green-800 px-6 py-4 rounded-lg mb-6 border border-green-200 font-medium shadow-sm">
-            Website content updated successfully!
-          </div>
-        )}
-        {saveStatus === "error" && (
-          <div className="bg-red-50 text-red-800 px-6 py-4 rounded-lg mb-6 border border-red-200 font-medium shadow-sm">
-            Error saving content. Please check the console for details.
-          </div>
-        )}
+        {/* Content */}
+        <div className="relative z-10 flex flex-col items-center text-center px-6">
+          {content.logoUrl && (
+            <img src={content.logoUrl} alt="Logo" className="w-32 md:w-56 mb-8 object-contain drop-shadow-2xl" />
+          )}
+          <h2 className="font-heading tracking-[0.2em] uppercase text-xl md:text-2xl text-[#E4C882] mb-4">
+            {content.heroTitle}
+          </h2>
+          <h1 className="font-heading font-bold text-5xl md:text-7xl lg:text-8xl text-white uppercase tracking-tighter leading-none mb-6">
+            {content.heroSubtitle}
+          </h1>
+          <div className="w-24 h-1 bg-[#C5A059] mt-4"></div>
+        </div>
+      </section>
 
-        <form onSubmit={handleSave} className="space-y-10 bg-white p-8 md:p-10 rounded-xl shadow-sm border border-slate-200">
-          
-          {/* General Info */}
-          <div>
-            <h2 className="text-xl font-semibold mb-4 text-slate-800 border-b border-slate-100 pb-2">General Information</h2>
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">Tagline</label>
-                <textarea
-                  name="tagline"
-                  value={content.tagline}
-                  onChange={handleChange}
-                  rows={3}
-                  className="w-full px-4 py-2 border border-slate-300 rounded-md focus:ring-blue-900 focus:border-blue-900 outline-none transition-colors"
-                />
+      {/* 2. About Section */}
+      <section className="w-full max-w-6xl mx-auto px-6 py-24 flex flex-col md:flex-row items-center gap-16">
+        <div className="w-full md:w-1/2 flex justify-center">
+          <div className="relative w-full max-w-md aspect-square">
+             {/* Decorative Border */}
+            <div className="absolute inset-0 border-2 border-[#C5A059] translate-x-4 translate-y-4"></div>
+            {content.aboutImageUrl ? (
+              <img 
+                src={content.aboutImageUrl} 
+                alt="About" 
+                className="relative z-10 w-full h-full object-cover grayscale brightness-75 hover:grayscale-0 hover:brightness-100 transition-all duration-700"
+              />
+            ) : (
+              <div className="relative z-10 w-full h-full bg-[#1A1A1A] flex items-center justify-center border border-[#333]">
+                <HardHat className="w-16 h-16 text-[#333]" />
               </div>
+            )}
+          </div>
+        </div>
+        <div className="w-full md:w-1/2 flex flex-col items-center md:items-start text-center md:text-left">
+          <h2 className="font-heading font-bold text-4xl md:text-5xl text-[#E4C882] uppercase tracking-widest mb-8">
+            {content.aboutHeading}
+          </h2>
+          <p className="font-sans font-light text-sm md:text-base text-gray-300 leading-relaxed tracking-wide whitespace-pre-wrap">
+            {content.aboutText}
+          </p>
+        </div>
+      </section>
+
+      {/* 3. Services Section */}
+      <section className="w-full bg-[#0d0d0d] py-28 px-6 flex flex-col items-center border-y border-[#1A1A1A]">
+        <h2 className="font-heading font-bold text-4xl md:text-5xl text-white uppercase tracking-widest mb-20 text-center">
+          Our <span className="text-gradient-gold">Services</span>
+        </h2>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl w-full">
+          {/* Service 1 */}
+          <div className="group bg-[#111] border border-[#222] p-10 flex flex-col items-center text-center hover:border-[#C5A059] transition-colors duration-500">
+            <div className="w-20 h-20 rounded-full bg-[#1a1a1a] flex items-center justify-center mb-8 group-hover:bg-[#C5A059] transition-colors duration-500">
+              <Building2 className="w-8 h-8 text-[#C5A059] group-hover:text-black transition-colors" strokeWidth={1.5} />
             </div>
+            <h4 className="font-heading font-bold text-xl uppercase tracking-widest text-white mb-4">
+              {content.service1Title}
+            </h4>
+            <p className="font-sans text-sm text-gray-400 leading-loose">
+              {content.service1Desc}
+            </p>
           </div>
 
-          {/* Media */}
-          <div>
-            <h2 className="text-xl font-semibold mb-4 text-slate-800 border-b border-slate-100 pb-2">Media & Branding</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="bg-slate-50 p-4 rounded-lg border border-slate-100">
-                <label className="block text-sm font-medium text-slate-700 mb-3">Company Logo</label>
-                {content.logoUrl && <img src={content.logoUrl} alt="Logo" className="h-20 mb-4 rounded shadow-sm bg-white" />}
-                <MediaUploader
-                  folder="branding"
-                  onUploadSuccess={(url) => setContent((prev) => ({ ...prev, logoUrl: url }))}
-                />
-              </div>
-              <div className="bg-slate-50 p-4 rounded-lg border border-slate-100">
-                <label className="block text-sm font-medium text-slate-700 mb-3">Hero Media (Image or Video)</label>
-                {content.heroMediaUrl && (
-                  <div className="mb-4 text-xs text-blue-600 break-all p-2 bg-blue-50 rounded border border-blue-100">
-                    {content.heroMediaUrl}
-                  </div>
-                )}
-                <MediaUploader
-                  folder="branding"
-                  onUploadSuccess={(url) => setContent((prev) => ({ ...prev, heroMediaUrl: url }))}
-                />
-              </div>
+          {/* Service 2 */}
+          <div className="group bg-[#111] border border-[#222] p-10 flex flex-col items-center text-center hover:border-[#C5A059] transition-colors duration-500">
+            <div className="w-20 h-20 rounded-full bg-[#1a1a1a] flex items-center justify-center mb-8 group-hover:bg-[#C5A059] transition-colors duration-500">
+              <Hammer className="w-8 h-8 text-[#C5A059] group-hover:text-black transition-colors" strokeWidth={1.5} />
             </div>
+            <h4 className="font-heading font-bold text-xl uppercase tracking-widest text-white mb-4">
+              {content.service2Title}
+            </h4>
+            <p className="font-sans text-sm text-gray-400 leading-loose">
+              {content.service2Desc}
+            </p>
           </div>
 
-          {/* Services */}
-          <div>
-            <h2 className="text-xl font-semibold mb-4 text-slate-800 border-b border-slate-100 pb-2">Services Descriptions</h2>
-            <div className="space-y-5">
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">Real Estate</label>
-                <textarea name="service1Desc" value={content.service1Desc} onChange={handleChange} rows={2} className="w-full px-4 py-2 border border-slate-300 rounded-md focus:ring-blue-900 focus:border-blue-900 outline-none" />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">Notary & Live Scan</label>
-                <textarea name="service2Desc" value={content.service2Desc} onChange={handleChange} rows={2} className="w-full px-4 py-2 border border-slate-300 rounded-md focus:ring-blue-900 focus:border-blue-900 outline-none" />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">Tax Preparation</label>
-                <textarea name="service3Desc" value={content.service3Desc} onChange={handleChange} rows={2} className="w-full px-4 py-2 border border-slate-300 rounded-md focus:ring-blue-900 focus:border-blue-900 outline-none" />
-              </div>
+          {/* Service 3 */}
+          <div className="group bg-[#111] border border-[#222] p-10 flex flex-col items-center text-center hover:border-[#C5A059] transition-colors duration-500">
+            <div className="w-20 h-20 rounded-full bg-[#1a1a1a] flex items-center justify-center mb-8 group-hover:bg-[#C5A059] transition-colors duration-500">
+              <HardHat className="w-8 h-8 text-[#C5A059] group-hover:text-black transition-colors" strokeWidth={1.5} />
             </div>
+            <h4 className="font-heading font-bold text-xl uppercase tracking-widest text-white mb-4">
+              {content.service3Title}
+            </h4>
+            <p className="font-sans text-sm text-gray-400 leading-loose">
+              {content.service3Desc}
+            </p>
           </div>
+        </div>
+      </section>
 
-          {/* Contact & Socials */}
-          <div>
-            <h2 className="text-xl font-semibold mb-4 text-slate-800 border-b border-slate-100 pb-2">Contact & Socials</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="md:col-span-2"><label className="block text-sm font-medium text-slate-700 mb-1">Address 1 (Downtown)</label><textarea name="address1" value={content.address1} onChange={handleChange} rows={2} className="w-full px-4 py-2 border border-slate-300 rounded-md focus:ring-blue-900 focus:border-blue-900 outline-none" /></div>
-              <div className="md:col-span-2"><label className="block text-sm font-medium text-slate-700 mb-1">Address 2 (Westside)</label><textarea name="address2" value={content.address2} onChange={handleChange} rows={2} className="w-full px-4 py-2 border border-slate-300 rounded-md focus:ring-blue-900 focus:border-blue-900 outline-none" /></div>
-              <div><label className="block text-sm font-medium text-slate-700 mb-1">Facebook URL</label><input type="text" name="facebook" value={content.facebook} onChange={handleChange} className="w-full px-4 py-2 border border-slate-300 rounded-md focus:ring-blue-900 focus:border-blue-900 outline-none" /></div>
-              <div><label className="block text-sm font-medium text-slate-700 mb-1">Instagram URL</label><input type="text" name="instagram" value={content.instagram} onChange={handleChange} className="w-full px-4 py-2 border border-slate-300 rounded-md focus:ring-blue-900 focus:border-blue-900 outline-none" /></div>
-              <div className="md:col-span-2"><label className="block text-sm font-medium text-slate-700 mb-1">LinkedIn URL</label><input type="text" name="linkedin" value={content.linkedin} onChange={handleChange} className="w-full px-4 py-2 border border-slate-300 rounded-md focus:ring-blue-900 focus:border-blue-900 outline-none" /></div>
+      {/* 4. Contact / Footer */}
+      <section className="w-full max-w-4xl mx-auto px-6 py-24 flex flex-col items-center text-center">
+        <h2 className="font-heading font-bold text-4xl text-[#E4C882] uppercase tracking-widest mb-16">
+          Connect With Us
+        </h2>
+        
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-y-12 gap-x-12 w-full">
+          <div className="flex flex-col items-center gap-4">
+            <div className="w-14 h-14 rounded-full border border-[#C5A059] flex items-center justify-center text-[#C5A059]">
+              <Phone strokeWidth={1.5} />
             </div>
+            <span className="font-sans text-sm tracking-widest uppercase text-gray-300">{content.contactPhone}</span>
           </div>
+          <div className="flex flex-col items-center gap-4">
+            <div className="w-14 h-14 rounded-full border border-[#C5A059] flex items-center justify-center text-[#C5A059]">
+              <Mail strokeWidth={1.5} />
+            </div>
+            <span className="font-sans text-sm tracking-widest uppercase text-gray-300">{content.contactEmail}</span>
+          </div>
+          <div className="flex flex-col items-center gap-4">
+            <div className="w-14 h-14 rounded-full border border-[#C5A059] flex items-center justify-center text-[#C5A059]">
+              <MapPin strokeWidth={1.5} />
+            </div>
+            <span className="font-sans text-sm tracking-widest uppercase text-gray-300 leading-relaxed whitespace-pre-wrap">{content.contactAddress}</span>
+          </div>
+        </div>
+      </section>
 
-          <div className="pt-8 flex justify-end">
-            <button
-              type="submit"
-              disabled={saveStatus === "saving"}
-              className="bg-blue-900 text-white px-8 py-3 rounded-md font-semibold hover:bg-blue-800 transition-colors shadow-md disabled:opacity-70 disabled:cursor-not-allowed"
-            >
-              {saveStatus === "saving" ? "Saving Changes..." : "Publish Changes"}
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
+      <footer className="w-full bg-[#050505] py-8 px-6 flex flex-col items-center text-center border-t border-[#111]">
+        <h4 className="font-heading font-bold text-lg text-[#C5A059] uppercase tracking-widest mb-2">Bromley Legacy Builders</h4>
+        <p className="font-sans text-xs text-gray-600 font-light uppercase tracking-widest">
+          &copy; {new Date().getFullYear()} The Standard Is Excellence. All Rights Reserved.
+        </p>
+      </footer>
+    </main>
   );
 }
