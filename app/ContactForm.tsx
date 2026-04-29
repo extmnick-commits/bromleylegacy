@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { collection, addDoc } from "firebase/firestore";
-import { db } from "../lib/firebase";
+import { db } from "./firebase";
 
 export default function ContactForm() {
   const [formData, setFormData] = useState({
