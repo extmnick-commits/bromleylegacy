@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { storage } from "../firebase";
+import { storage } from "./firebase";
 import imageCompression from "browser-image-compression";
 
 interface MediaUploaderProps {
