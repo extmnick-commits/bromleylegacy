@@ -47,6 +47,12 @@ export default function AdminPage() {
     return () => unsubscribe();
   }, [router]);
 
+  const isVideoUrl = (url: string) => {
+    if (!url) return false;
+    const urlWithoutQuery = url.split("?")[0].toLowerCase();
+    return urlWithoutQuery.endsWith(".mp4") || urlWithoutQuery.endsWith(".webm") || urlWithoutQuery.endsWith(".mov");
+  };
+
   const fetchContent = async () => {
     try {
       const docRef = doc(db, "site_content", "main");
@@ -131,9 +137,16 @@ export default function AdminPage() {
               <div className="bg-[#222] p-4 rounded-lg border border-[#444]">
                 <label className="block text-sm font-medium text-gray-300 mb-3">Hero Background Media (Image or Video)</label>
                 {content.heroMediaUrl && (
-                  <div className="mb-4 text-xs text-[#C5A059] break-all p-2 bg-[#111] rounded border border-[#333]">
-                    {content.heroMediaUrl}
-                  </div>
+              <div className="mb-4">
+                {isVideoUrl(content.heroMediaUrl) ? (
+                  <video src={content.heroMediaUrl} className="h-32 w-auto object-cover rounded shadow-sm border border-[#333] mb-2" autoPlay muted loop playsInline />
+                ) : (
+                  <img src={content.heroMediaUrl} alt="Hero Media" className="h-32 w-auto object-cover rounded shadow-sm border border-[#333] mb-2" />
+                )}
+                <div className="text-xs text-[#C5A059] break-all p-2 bg-[#111] rounded border border-[#333]">
+                  {content.heroMediaUrl}
+                </div>
+              </div>
                 )}
                 <MediaUploader
                   folder="branding"

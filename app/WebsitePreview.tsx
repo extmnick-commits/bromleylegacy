@@ -39,26 +39,28 @@ export default function WebsitePreview({ content }: { content: SiteContent }) {
           {content.heroMediaUrl ? (
             isVideo ? (
               <video 
+              key={content.heroMediaUrl}
                 autoPlay 
                 loop 
                 muted 
                 playsInline
-                className="w-full h-full object-cover opacity-80"
+              className="w-full h-full object-cover opacity-100"
               >
                 <source src={content.heroMediaUrl} />
               </video>
             ) : (
               <img 
+              key={content.heroMediaUrl}
                 src={content.heroMediaUrl} 
                 alt="Background" 
-                className="w-full h-full object-cover opacity-80"
+              className="w-full h-full object-cover opacity-100"
               />
             )
           ) : (
              <div className="w-full h-full bg-gradient-to-br from-[#111] to-[#000]"></div>
           )}
           {/* Vignette Overlay */}
-          <div className="absolute inset-0 bg-black bg-opacity-30"></div>
+        <div className="absolute inset-0 bg-black/40"></div>
           <div className="absolute inset-0 bg-gradient-to-t from-[#080808] via-transparent to-transparent"></div>
         </div>
 
