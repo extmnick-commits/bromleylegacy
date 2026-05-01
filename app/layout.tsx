@@ -40,7 +40,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${montserrat.variable} ${playfair.variable} ${openSans.variable} h-full antialiased`}
+      className={`${montserrat.variable} ${playfair.variable} ${openSans.variable} h-full antialiased scroll-smooth`}
     >
       <body className="min-h-full flex flex-col font-sans bg-background text-foreground selection:bg-gold selection:text-black">
         {children}

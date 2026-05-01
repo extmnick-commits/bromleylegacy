@@ -1,4 +1,5 @@
 import { Building2, Landmark, Users, HardHat, Phone, Mail, MapPin } from "lucide-react";
+import ContactForm from "./ContactForm";
 
 export interface SiteContent {
   logoUrl: string;
@@ -72,7 +73,10 @@ export default function WebsitePreview({ content }: { content: SiteContent }) {
           <h1 className="font-heading font-bold text-4xl sm:text-5xl md:text-7xl lg:text-8xl text-white uppercase tracking-tighter leading-none mb-6">
             {content.heroSubtitle}
           </h1>
-          <div className="w-24 h-1 bg-[#C5A059] mt-4"></div>
+          <div className="flex flex-col items-center gap-8 mt-4">
+            <div className="w-24 h-1 bg-[#C5A059]"></div>
+            <a href="#contact-section" className="bg-[#C5A059] text-black px-8 py-4 rounded-md font-bold uppercase tracking-widest hover:bg-[#E4C882] transition-all transform hover:scale-105 active:scale-95 shadow-xl">Get Started</a>
+          </div>
         </div>
       </section>
 
@@ -178,6 +182,17 @@ export default function WebsitePreview({ content }: { content: SiteContent }) {
             </div>
             <span className="font-sans text-sm tracking-widest uppercase text-gray-300 leading-relaxed whitespace-pre-wrap">{content.contactAddress}</span>
           </a>
+        </div>
+      </section>
+
+      {/* 5. Contact Form Section */}
+      <section id="contact-section" className="w-full bg-[#f2f2f2] py-20 px-6 flex flex-col items-center text-black">
+        <div className="max-w-4xl w-full text-center mb-12">
+          <h2 className="font-heading font-bold text-4xl md:text-5xl uppercase tracking-widest mb-4">Start Your Legacy</h2>
+          <p className="font-sans text-gray-600 max-w-2xl mx-auto">Ready to build your future? Send us a message and we&apos;ll get back to you to discuss your plan!</p>
+        </div>
+        <div className="w-full max-w-2xl">
+          <ContactForm />
         </div>
       </section>
 
