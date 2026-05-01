@@ -23,7 +23,7 @@ const openSans = Open_Sans({
 
 export const metadata: Metadata = {
   title: "Bromley Legacy Builders",
-  description: "The standard is excellence. Premium builders and contractors.",
+  description: "Helping local families build a secure financial future. Bromley Legacy offers down-to-earth financial guidance to help you protect your home and plan for what matters most.",
 };
 
 export const viewport: Viewport = {
