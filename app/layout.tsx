@@ -24,6 +24,10 @@ const openSans = Open_Sans({
 export const metadata: Metadata = {
   title: "Bromley Legacy Builders",
   description: "Helping local families build a secure financial future. Bromley Legacy offers down-to-earth financial guidance to help you protect your home and plan for what matters most.",
+  icons: {
+    icon: "/icon.png",
+    apple: "/apple-icon.png",
+  },
 };
 
 export const viewport: Viewport = {
