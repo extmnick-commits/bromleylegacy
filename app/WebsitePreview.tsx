@@ -24,8 +24,8 @@ export default function WebsitePreview({ content }: { content: SiteContent }) {
   // Helper to determine if hero media is a video based on common extensions in Firebase URL
   const isVideoUrl = (url: string) => {
     if (!url) return false;
-    const lowerUrl = url.toLowerCase();
-    return lowerUrl.includes(".mp4") || lowerUrl.includes(".webm") || lowerUrl.includes(".mov");
+    const urlWithoutQuery = url.split("?")[0].toLowerCase();
+    return urlWithoutQuery.endsWith(".mp4") || urlWithoutQuery.endsWith(".webm") || urlWithoutQuery.endsWith(".mov");
   };
 
   const isVideo = isVideoUrl(content.heroMediaUrl);
@@ -43,7 +43,7 @@ export default function WebsitePreview({ content }: { content: SiteContent }) {
                 loop 
                 muted 
                 playsInline
-                className="w-full h-full object-cover opacity-40"
+                className="w-full h-full object-cover opacity-80"
               >
                 <source src={content.heroMediaUrl} />
               </video>
@@ -51,14 +51,14 @@ export default function WebsitePreview({ content }: { content: SiteContent }) {
               <img 
                 src={content.heroMediaUrl} 
                 alt="Background" 
-                className="w-full h-full object-cover opacity-40"
+                className="w-full h-full object-cover opacity-80"
               />
             )
           ) : (
              <div className="w-full h-full bg-gradient-to-br from-[#111] to-[#000]"></div>
           )}
           {/* Vignette Overlay */}
-          <div className="absolute inset-0 bg-black bg-opacity-50"></div>
+          <div className="absolute inset-0 bg-black bg-opacity-30"></div>
           <div className="absolute inset-0 bg-gradient-to-t from-[#080808] via-transparent to-transparent"></div>
         </div>
 
