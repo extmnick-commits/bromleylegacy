@@ -7,6 +7,7 @@ export interface SiteContent {
   heroSubtitle: string;
   heroMediaUrl: string;
   aboutHeading: string;
+  aboutSubheading?: string;
   aboutText: string;
   aboutImageUrl: string;
   service1Title: string;
@@ -87,25 +88,31 @@ export default function WebsitePreview({ content }: { content: SiteContent }) {
         <div className="w-full md:w-1/2 flex justify-center">
           <div className="relative w-[90%] sm:w-full max-w-md aspect-square">
              {/* Decorative Border */}
-            <div className="absolute inset-0 border-2 border-[#C5A059] translate-x-2 translate-y-2 md:translate-x-4 md:translate-y-4"></div>
+            <div className="absolute inset-0 border-2 border-[#C5A059] translate-x-3 translate-y-3 md:translate-x-5 md:translate-y-5 rounded-sm"></div>
             {content.aboutImageUrl ? (
               <img 
                 src={content.aboutImageUrl} 
                 alt="About" 
-                className="relative z-10 w-full h-full object-cover grayscale brightness-75 hover:grayscale-0 hover:brightness-100 transition-all duration-700"
+                className="relative z-10 w-full h-full object-cover rounded-sm shadow-2xl hover:grayscale-[50%] transition-all duration-700"
               />
             ) : (
-              <div className="relative z-10 w-full h-full bg-[#1A1A1A] flex items-center justify-center border border-[#333]"> {/* Using HardHat directly for about image */}
-                <HardHat className="w-16 h-16 text-[#333]" />
+              <div className="relative z-10 w-full h-full bg-[#1A1A1A] flex items-center justify-center border border-[#333] rounded-sm shadow-2xl">
+                <Users className="w-16 h-16 text-[#333]" />
               </div>
             )}
           </div>
         </div>
         <div className="w-full md:w-1/2 flex flex-col items-center md:items-start text-center md:text-left">
-          <h2 className="font-heading font-bold text-4xl md:text-5xl text-[#E4C882] uppercase tracking-widest mb-8">
+          <h2 className="font-heading font-bold text-4xl md:text-5xl text-[#E4C882] uppercase tracking-widest mb-4">
             {content.aboutHeading}
           </h2>
-          <p className="font-sans font-light text-sm md:text-base text-gray-300 leading-relaxed tracking-wide whitespace-pre-wrap">
+          {content.aboutSubheading && (
+            <h3 className="font-heading text-xl md:text-2xl text-white mb-6 font-medium">
+              {content.aboutSubheading}
+            </h3>
+          )}
+          <div className="w-16 h-1 bg-[#C5A059] mb-8"></div>
+          <p className="font-sans font-light text-base md:text-lg text-gray-300 leading-relaxed tracking-wide whitespace-pre-wrap">
             {content.aboutText}
           </p>
         </div>

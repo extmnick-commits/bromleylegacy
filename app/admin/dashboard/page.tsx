@@ -14,8 +14,9 @@ export default function AdminPage() {
     heroTitle: "THE STANDARD IS",
     heroSubtitle: "BROMLEY LEGACY BUILDERS",
     heroMediaUrl: "",
-    aboutHeading: "Our Legacy",
-    aboutText: "We build with excellence.",
+    aboutHeading: "Meet Simon Bromley",
+    aboutSubheading: "Helping Middle-Income Families Become Financially Independent",
+    aboutText: "Simon Bromley is dedicated to empowering middle-income families with the tools and strategies they need to achieve true financial independence.\n\nWith a down-to-earth approach and a commitment to excellence, Simon provides personalized financial guidance to help you protect your assets, plan for retirement, and build a secure legacy for generations to come.",
     aboutImageUrl: "",
     service1Title: "Custom Homes",
     service1Desc: "Building your dream home from the ground up.",
@@ -146,6 +147,13 @@ export default function AdminPage() {
                 <div className="text-xs text-[#C5A059] break-all p-2 bg-[#111] rounded border border-[#333]">
                   {content.heroMediaUrl}
                 </div>
+                <button
+                  type="button"
+                  onClick={() => setContent((prev) => ({ ...prev, heroMediaUrl: "" }))}
+                  className="mt-2 px-3 py-1 bg-red-900/30 text-red-400 text-xs rounded border border-red-800 hover:bg-red-900/50 transition-colors"
+                >
+                  Remove Media
+                </button>
               </div>
                 )}
                 <MediaUploader
@@ -155,7 +163,18 @@ export default function AdminPage() {
               </div>
               <div className="bg-[#222] p-4 rounded-lg border border-[#444]">
                 <label className="block text-sm font-medium text-gray-300 mb-3">Company Logo</label>
-                {content.logoUrl && <img src={content.logoUrl} alt="Logo" className="h-20 mb-4 rounded shadow-sm bg-black" />}
+                {content.logoUrl && (
+                  <div className="mb-4">
+                    <img src={content.logoUrl} alt="Logo" className="h-20 mb-2 rounded shadow-sm bg-black" />
+                    <button
+                      type="button"
+                      onClick={() => setContent((prev) => ({ ...prev, logoUrl: "" }))}
+                      className="px-3 py-1 bg-red-900/30 text-red-400 text-xs rounded border border-red-800 hover:bg-red-900/50 transition-colors"
+                    >
+                      Remove Logo
+                    </button>
+                  </div>
+                )}
                 <MediaUploader
                   folder="branding"
                   onUploadSuccess={(url) => setContent((prev) => ({ ...prev, logoUrl: url }))}
@@ -173,12 +192,27 @@ export default function AdminPage() {
                 <input type="text" name="aboutHeading" value={content.aboutHeading} onChange={handleChange} className="w-full px-4 py-2 bg-[#222] border border-[#444] rounded-md focus:ring-[#C5A059] focus:border-[#C5A059] outline-none text-white" />
               </div>
               <div>
+                <label className="block text-sm font-medium text-gray-300 mb-1">About Subheading</label>
+                <input type="text" name="aboutSubheading" value={content.aboutSubheading || ""} onChange={handleChange} className="w-full px-4 py-2 bg-[#222] border border-[#444] rounded-md focus:ring-[#C5A059] focus:border-[#C5A059] outline-none text-white" />
+              </div>
+              <div>
                 <label className="block text-sm font-medium text-gray-300 mb-1">About Text</label>
                 <textarea name="aboutText" value={content.aboutText} onChange={handleChange} rows={4} className="w-full px-4 py-2 bg-[#222] border border-[#444] rounded-md focus:ring-[#C5A059] focus:border-[#C5A059] outline-none text-white" />
               </div>
               <div className="bg-[#222] p-4 rounded-lg border border-[#444]">
                 <label className="block text-sm font-medium text-gray-300 mb-3">About Image</label>
-                {content.aboutImageUrl && <img src={content.aboutImageUrl} alt="About" className="h-32 object-cover mb-4 rounded shadow-sm border border-[#333]" />}
+                {content.aboutImageUrl && (
+                  <div className="mb-4">
+                    <img src={content.aboutImageUrl} alt="About" className="h-32 object-cover mb-2 rounded shadow-sm border border-[#333]" />
+                    <button
+                      type="button"
+                      onClick={() => setContent((prev) => ({ ...prev, aboutImageUrl: "" }))}
+                      className="px-3 py-1 bg-red-900/30 text-red-400 text-xs rounded border border-red-800 hover:bg-red-900/50 transition-colors"
+                    >
+                      Remove Image
+                    </button>
+                  </div>
+                )}
                 <MediaUploader
                   folder="branding"
                   onUploadSuccess={(url) => setContent((prev) => ({ ...prev, aboutImageUrl: url }))}
