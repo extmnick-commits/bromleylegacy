@@ -24,6 +24,15 @@ export default function AdminPage() {
     service2Desc: "Transforming existing spaces into modern masterpieces.",
     service3Title: "Commercial",
     service3Desc: "High-quality commercial construction and build-outs.",
+    careerHeading: "Before you APPLY",
+    career1Title: "NO EXPERIENCE NEEDED",
+    career1Desc: "WE STARTED EXACTLY WHERE YOU ARE. ZERO BACKGROUND IN INSURANCE OR FINANCE REQUIRED.",
+    career2Title: "NO DEGREE NEEDED",
+    career2Desc: "WE DON'T CARE WHERE YOU WENT TO SCHOOL. WE CARE HOW COMMITTED YOU ARE.",
+    career3Title: "BE COACHABLE",
+    career3Desc: "COME READY TO LEARN. WE GIVE YOU THE TOOLS - YOU HAVE TO SHOW UP FOR YOURSELF.",
+    career4Title: "ONBOARDING ACROSS THE US",
+    career4Desc: "WORK REMOTELY & GET LICENSED REMOTELY. PHYSICAL OFFICE IN SAN DIEGO FOR THOSE WHO PREFER IN-PERSON.",
     contactPhone: "(555) 123-4567",
     contactEmail: "info@bromleylegacy.com",
     contactAddress: "123 Builder Lane, San Diego, CA",
@@ -250,6 +259,55 @@ export default function AdminPage() {
                   <input type="text" name="service3Title" value={content.service3Title} onChange={handleChange} className="w-full px-4 py-2 bg-[#111] border border-[#333] rounded-md focus:ring-[#C5A059] outline-none text-white" />
                   <label className="block text-sm font-medium text-gray-300 mb-1">Description</label>
                   <textarea name="service3Desc" value={content.service3Desc} onChange={handleChange} rows={2} className="w-full px-4 py-2 bg-[#111] border border-[#333] rounded-md focus:ring-[#C5A059] outline-none text-white" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Careers Section */}
+          <div>
+            <h2 className="text-xl font-heading font-bold mb-4 text-[#C5A059] border-b border-[#333] pb-2 uppercase tracking-widest">Careers Section</h2>
+            <div className="space-y-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-1">Section Heading</label>
+                <input type="text" name="careerHeading" value={content.careerHeading} onChange={handleChange} className="w-full px-4 py-2 bg-[#222] border border-[#444] rounded-md focus:ring-[#C5A059] outline-none text-white" />
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="p-4 border border-[#333] rounded-lg bg-[#222]">
+                  <h3 className="text-[#E4C882] font-semibold mb-3">Item 1</h3>
+                  <div className="space-y-3">
+                    <label className="block text-sm font-medium text-gray-300 mb-1">Title</label>
+                    <input type="text" name="career1Title" value={content.career1Title} onChange={handleChange} className="w-full px-4 py-2 bg-[#111] border border-[#333] rounded-md focus:ring-[#C5A059] outline-none text-white" />
+                    <label className="block text-sm font-medium text-gray-300 mb-1">Description</label>
+                    <textarea name="career1Desc" value={content.career1Desc} onChange={handleChange} rows={3} className="w-full px-4 py-2 bg-[#111] border border-[#333] rounded-md focus:ring-[#C5A059] outline-none text-white" />
+                  </div>
+                </div>
+                <div className="p-4 border border-[#333] rounded-lg bg-[#222]">
+                  <h3 className="text-[#E4C882] font-semibold mb-3">Item 2</h3>
+                  <div className="space-y-3">
+                    <label className="block text-sm font-medium text-gray-300 mb-1">Title</label>
+                    <input type="text" name="career2Title" value={content.career2Title} onChange={handleChange} className="w-full px-4 py-2 bg-[#111] border border-[#333] rounded-md focus:ring-[#C5A059] outline-none text-white" />
+                    <label className="block text-sm font-medium text-gray-300 mb-1">Description</label>
+                    <textarea name="career2Desc" value={content.career2Desc} onChange={handleChange} rows={3} className="w-full px-4 py-2 bg-[#111] border border-[#333] rounded-md focus:ring-[#C5A059] outline-none text-white" />
+                  </div>
+                </div>
+                <div className="p-4 border border-[#333] rounded-lg bg-[#222]">
+                  <h3 className="text-[#E4C882] font-semibold mb-3">Item 3</h3>
+                  <div className="space-y-3">
+                    <label className="block text-sm font-medium text-gray-300 mb-1">Title</label>
+                    <input type="text" name="career3Title" value={content.career3Title} onChange={handleChange} className="w-full px-4 py-2 bg-[#111] border border-[#333] rounded-md focus:ring-[#C5A059] outline-none text-white" />
+                    <label className="block text-sm font-medium text-gray-300 mb-1">Description</label>
+                    <textarea name="career3Desc" value={content.career3Desc} onChange={handleChange} rows={3} className="w-full px-4 py-2 bg-[#111] border border-[#333] rounded-md focus:ring-[#C5A059] outline-none text-white" />
+                  </div>
+                </div>
+                <div className="p-4 border border-[#333] rounded-lg bg-[#222]">
+                  <h3 className="text-[#E4C882] font-semibold mb-3">Item 4</h3>
+                  <div className="space-y-3">
+                    <label className="block text-sm font-medium text-gray-300 mb-1">Title</label>
+                    <input type="text" name="career4Title" value={content.career4Title} onChange={handleChange} className="w-full px-4 py-2 bg-[#111] border border-[#333] rounded-md focus:ring-[#C5A059] outline-none text-white" />
+                    <label className="block text-sm font-medium text-gray-300 mb-1">Description</label>
+                    <textarea name="career4Desc" value={content.career4Desc} onChange={handleChange} rows={3} className="w-full px-4 py-2 bg-[#111] border border-[#333] rounded-md focus:ring-[#C5A059] outline-none text-white" />
+                  </div>
                 </div>
               </div>
             </div>

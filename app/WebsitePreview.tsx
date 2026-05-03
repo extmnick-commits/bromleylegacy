@@ -1,4 +1,4 @@
-import { Building2, Landmark, Users, HardHat, Phone, Mail, MapPin } from "lucide-react";
+import { Building2, Landmark, Users, HardHat, Phone, Mail, MapPin, Briefcase, GraduationCap, Target, Globe } from "lucide-react";
 import ContactForm from "./ContactForm";
 
 export interface SiteContent {
@@ -16,6 +16,15 @@ export interface SiteContent {
   service2Desc: string;
   service3Title: string;
   service3Desc: string;
+  careerHeading: string;
+  career1Title: string;
+  career1Desc: string;
+  career2Title: string;
+  career2Desc: string;
+  career3Title: string;
+  career3Desc: string;
+  career4Title: string;
+  career4Desc: string;
   contactPhone: string;
   contactEmail: string;
   contactAddress: string;
@@ -166,7 +175,51 @@ export default function WebsitePreview({ content }: { content: SiteContent }) {
         </div>
       </section>
 
-      {/* 4. Contact / Footer */}
+      {/* 4. Careers / Before You Apply Section */}
+      <section className="w-full bg-[#111] py-16 md:py-24 px-6 flex flex-col items-center">
+        <h2 className="font-heading font-bold text-4xl md:text-5xl text-white uppercase tracking-widest mb-12 md:mb-20 text-center">
+          {content.careerHeading}
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl w-full">
+          {/* Career Card 1 */}
+          <div className="bg-[#1a1a1a] p-8 border border-[#333] hover:border-[#C5A059] transition-all duration-300 rounded-sm group flex flex-col items-center text-center">
+            <div className="w-16 h-16 rounded-full bg-[#222] flex items-center justify-center mb-6 group-hover:bg-[#C5A059] transition-colors duration-300">
+              <Briefcase className="w-7 h-7 text-[#C5A059] group-hover:text-black transition-colors" />
+            </div>
+            <h4 className="font-heading font-bold text-lg text-white uppercase tracking-wider mb-4">{content.career1Title}</h4>
+            <p className="font-sans text-xs sm:text-sm text-gray-400 leading-relaxed uppercase">{content.career1Desc}</p>
+          </div>
+
+          {/* Career Card 2 */}
+          <div className="bg-[#1a1a1a] p-8 border border-[#333] hover:border-[#C5A059] transition-all duration-300 rounded-sm group flex flex-col items-center text-center">
+            <div className="w-16 h-16 rounded-full bg-[#222] flex items-center justify-center mb-6 group-hover:bg-[#C5A059] transition-colors duration-300">
+              <GraduationCap className="w-7 h-7 text-[#C5A059] group-hover:text-black transition-colors" />
+            </div>
+            <h4 className="font-heading font-bold text-lg text-white uppercase tracking-wider mb-4">{content.career2Title}</h4>
+            <p className="font-sans text-xs sm:text-sm text-gray-400 leading-relaxed uppercase">{content.career2Desc}</p>
+          </div>
+
+          {/* Career Card 3 */}
+          <div className="bg-[#1a1a1a] p-8 border border-[#333] hover:border-[#C5A059] transition-all duration-300 rounded-sm group flex flex-col items-center text-center">
+            <div className="w-16 h-16 rounded-full bg-[#222] flex items-center justify-center mb-6 group-hover:bg-[#C5A059] transition-colors duration-300">
+              <Target className="w-7 h-7 text-[#C5A059] group-hover:text-black transition-colors" />
+            </div>
+            <h4 className="font-heading font-bold text-lg text-white uppercase tracking-wider mb-4">{content.career3Title}</h4>
+            <p className="font-sans text-xs sm:text-sm text-gray-400 leading-relaxed uppercase">{content.career3Desc}</p>
+          </div>
+
+          {/* Career Card 4 */}
+          <div className="bg-[#1a1a1a] p-8 border border-[#333] hover:border-[#C5A059] transition-all duration-300 rounded-sm group flex flex-col items-center text-center">
+            <div className="w-16 h-16 rounded-full bg-[#222] flex items-center justify-center mb-6 group-hover:bg-[#C5A059] transition-colors duration-300">
+              <Globe className="w-7 h-7 text-[#C5A059] group-hover:text-black transition-colors" />
+            </div>
+            <h4 className="font-heading font-bold text-lg text-white uppercase tracking-wider mb-4">{content.career4Title}</h4>
+            <p className="font-sans text-xs sm:text-sm text-gray-400 leading-relaxed uppercase">{content.career4Desc}</p>
+          </div>
+        </div>
+      </section>
+
+      {/* 5. Contact / Footer */}
       <section className="w-full max-w-4xl mx-auto px-6 py-16 md:py-24 flex flex-col items-center text-center">
         <h2 className="font-heading font-bold text-3xl md:text-4xl text-[#E4C882] uppercase tracking-widest mb-10 md:mb-16">
           Connect With Us
